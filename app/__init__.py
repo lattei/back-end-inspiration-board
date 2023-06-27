@@ -22,7 +22,7 @@ def create_app():
     # from app.models.ExampleModel import ExampleModel
 
     from app.models import Board, Card
-    
+
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -30,6 +30,12 @@ def create_app():
     # Register Blueprints here
     # from .routes import example_bp
     # app.register_blueprint(example_bp)
+
+    from .routes import boards_bp
+    from .routes import cards_bp
+    app.register_blueprint(boards_bp)
+    app.register_blueprint(cards_bp)
+    
 
     CORS(app)
     return app
