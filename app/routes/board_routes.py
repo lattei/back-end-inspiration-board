@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models import Board
+from app.models.board import Board
 from app.routes.helpers import validate_model
 from app import db
 
