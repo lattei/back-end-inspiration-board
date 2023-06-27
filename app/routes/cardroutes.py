@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models import Card
+from app.models.card import Card
 from app import db
 
 card_bp = Blueprint('card', __name__, url_prefix='/cards')
