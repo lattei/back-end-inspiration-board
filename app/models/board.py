@@ -18,3 +18,5 @@ class Board(db.Model):
             "title": self.title,
             "owner": self.owner
         }
+
+from app.models.board import Board
