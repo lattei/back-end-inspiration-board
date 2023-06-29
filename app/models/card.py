@@ -22,3 +22,4 @@ class Card(db.Model):
         }
 
 from app.models.card import Card
+

@@ -5,13 +5,13 @@ from app import db
 
 board_bp = Blueprint('board', __name__, url_prefix='/boards')
 
-@board_bp.route('/', methods=['GET'])
+@board_bp.route('', methods=['GET'])
 def get_boards():
     boards = Board.query.all()
     board_list = [board.to_json() for board in boards]
     return jsonify(board_list), 200
 
-@board_bp.route('/', methods=['POST'])
+@board_bp.route('', methods=['POST'])
 def create_board():
     data = request.json
     title = data.get('title')
