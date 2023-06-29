@@ -5,19 +5,20 @@ from app import db
 
 card_bp = Blueprint('card', __name__, url_prefix='/cards')
 
-@card_bp.route('/', methods=['GET'])
+@card_bp.route('', methods=['GET'])
 def get_cards():
     cards = Card.query.all()
     card_list = [card.to_json() for card in cards]
     return jsonify(card_list)
 
-@card_bp.route('/', methods=['POST'])
+@card_bp.route('', methods=['POST'])
 def create_card():
     data = request.json
     message = data.get('message')
     likes_count = data.get('likes_count')
+    board_id = data.get("board_id")
 
-    card = Card(message=message, likes_count=likes_count)
+    card = Card(message=message, likes_count=likes_count, board_id=board_id)
     db.session.add(card)
     db.session.commit()
 

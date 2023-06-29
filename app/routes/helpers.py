@@ -14,5 +14,20 @@ def validate_model(cls, model_id):
         abort(make_response({"message":f"There's no {model_id}, sorry."}, 404))
     return model
 
+#SLACK API
+# def create_msg_slack(card):
+#     slack_url = "https://slack.com/api/chat.postMessage"
 
+#     message_body = {
+#         "channel": "#in-your-f-a-c-e",
+#         "text": f"Group member created a new card! Message: {card.message}"
+#     }
+
+#     headers = {
+#         "Authorization": os.environ.get("SLACK_API_KEY")
+#     }
+
+#     response = requests.post(slack_url, headers=headers, json=message_body)
+
+#     print(response.text)
         
