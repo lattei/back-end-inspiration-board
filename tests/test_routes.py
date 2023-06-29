@@ -2,7 +2,7 @@ from app.models.board import Board
 from app.models.card import Card
 import pytest
 
-
+# Test cards
 def test_get_cards_no_saved_cards(client):
     # Act
     response = client.get("/cards")
@@ -11,6 +11,7 @@ def test_get_cards_no_saved_cards(client):
     # Assert
     assert response.status_code == 200
     assert response_body == []
+
 
 def test_get_tasks_one_saved_card(client, one_card):
     # Act
@@ -27,6 +28,7 @@ def test_get_tasks_one_saved_card(client, one_card):
             "likes_count": 0
         }
     ]
+
 
 def test_get_card(client, one_card):
     # Act
@@ -45,11 +47,10 @@ def test_get_card(client, one_card):
     }
 
 
-
 #Tests requirements for 40char limit
-
 def is_message_within_limit(message, max_length):
     return len(message) <= max_length
+
 
 def test_card_message_length():
     # Arrange
@@ -59,6 +60,9 @@ def test_card_message_length():
     result = is_message_within_limit(message, max_length)
     # Assert
     assert result == True
+from app.models.board import Board
+import pytest
+
 
 def test_card_message_length_exceed_limit():
     # Arrange
@@ -68,3 +72,136 @@ def test_card_message_length_exceed_limit():
     result = is_message_within_limit(message, max_length)
     # Assert
     assert result == False 
+
+
+
+# Test boards
+
+def test_get_boards_no_saved_boards(client):
+    # Act
+    response = client.get("/boards")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 200
+    assert response_body == []
+
+
+def test_get_boards_one_saved_board(client, one_board):
+    # Act
+    response = client.get("/boards")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 200
+    assert len(response_body) == 1
+    assert response_body == [
+        {
+            "board_id": 1,
+            "title": "Inspo board",
+            "owner": "f-a-c-e"
+        }
+    ]
+
+
+def test_get_board(client, one_board):
+    # Act
+    response = client.get("/boards/1")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 200
+    assert "goal" in response_body
+    assert response_body == {
+        "goal": {
+            "board_id": 1,
+            "title": "Inspo board",
+            "owner": "f-a-c-e"
+        }
+    }
+
+
+def test_get_board_not_found(client):
+    # Act
+    response = client.get("/boards/1")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 404
+    assert response_body == {"message": "There's no 1, sorry."}
+
+
+def test_create_board(client):
+    # Act
+    response = client.post("/boards", json={
+        "title": "My New Board"
+    })
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 201
+    assert "board" in response_body
+    assert response_body == {
+        "board": {
+            "board_id": 1,
+            "title": "My New Board"
+        }
+    }
+
+
+def test_update_board(client, one_board):
+    # Act
+    response = client.put("/boards/1", json={
+        "title": "Updated Board Title"
+    })
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 200
+    assert "board" in response_body
+    assert response_body == {
+        "board": {
+            "board_id": 1,
+            "title": "Updated Board Title"
+        }
+    }
+
+
+def test_update_board_not_found(client):
+    # Act
+    response = client.put("/boards/1", json={
+        "title": "Updated Board Title",
+    })
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 404
+    assert response_body == {"message": "Board 1 not found"}
+
+
+def test_delete_board(client, one_board):
+    # Act
+    response = client.delete("/boards/1")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 200
+    assert "details" in response_body
+    assert response_body == {
+        "details": 'Board 1 "Inspo board" successfully deleted'
+    }
+
+    # Check that the board was deleted
+    response = client.get("/boards/1")
+    assert response.status_code == 404
+    assert response_body ==  {'details': 'Board 1 "Inspo board" successfully deleted'}
+
+
+def test_delete_board_not_found(client):
+    # Act
+    response = client.delete("/boards/1")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 404
+    assert response_body == {"message": "Board 1 not found"}
