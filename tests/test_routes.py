@@ -2,7 +2,7 @@ from app.models.board import Board
 from app.models.card import Card
 import pytest
 
-
+# Test cards
 def test_get_cards_no_saved_cards(client):
     # Act
     response = client.get("/cards")
@@ -11,6 +11,7 @@ def test_get_cards_no_saved_cards(client):
     # Assert
     assert response.status_code == 200
     assert response_body == []
+
 
 def test_get_tasks_one_saved_card(client, one_card):
     # Act
@@ -27,6 +28,7 @@ def test_get_tasks_one_saved_card(client, one_card):
             "likes_count": 0
         }
     ]
+
 
 def test_get_card(client, one_card):
     # Act
@@ -45,11 +47,10 @@ def test_get_card(client, one_card):
     }
 
 
-
 #Tests requirements for 40char limit
-
 def is_message_within_limit(message, max_length):
     return len(message) <= max_length
+
 
 def test_card_message_length():
     # Arrange
@@ -62,7 +63,20 @@ def test_card_message_length():
 from app.models.board import Board
 import pytest
 
-@pytest.mark.skip(reason="No way to test this feature yet")
+
+def test_card_message_length_exceed_limit():
+    # Arrange
+    max_length =  40
+    message = "This is a test message that exceeds the character limit. It contains more than 40 characters."
+    # Act
+    result = is_message_within_limit(message, max_length)
+    # Assert
+    assert result == False 
+
+
+
+# Test boards
+
 def test_get_boards_no_saved_boards(client):
     # Act
     response = client.get("/boards")
@@ -73,7 +87,6 @@ def test_get_boards_no_saved_boards(client):
     assert response_body == []
 
 
-@pytest.mark.skip(reason="No way to test this feature yet")
 def test_get_boards_one_saved_board(client, one_board):
     # Act
     response = client.get("/boards")
@@ -91,8 +104,7 @@ def test_get_boards_one_saved_board(client, one_board):
     ]
 
 
-@pytest.mark.skip(reason="No way to test this feature yet")
-def test_get_goal(client, one_board):
+def test_get_board(client, one_board):
     # Act
     response = client.get("/boards/1")
     response_body = response.get_json()
@@ -109,7 +121,6 @@ def test_get_goal(client, one_board):
     }
 
 
-@pytest.mark.skip(reason="test to be completed by student")
 def test_get_board_not_found(client):
     # Act
     response = client.get("/boards/1")
@@ -120,7 +131,6 @@ def test_get_board_not_found(client):
     assert response_body == {"message": "There's no 1, sorry."}
 
 
-@pytest.mark.skip(reason="No way to test this feature yet")
 def test_create_board(client):
     # Act
     response = client.post("/boards", json={
@@ -139,7 +149,6 @@ def test_create_board(client):
     }
 
 
-@pytest.mark.skip(reason="test to be completed by student")
 def test_update_board(client, one_board):
     # Act
     response = client.put("/boards/1", json={
@@ -157,7 +166,7 @@ def test_update_board(client, one_board):
         }
     }
 
-@pytest.mark.skip(reason="test to be completed by student")
+
 def test_update_board_not_found(client):
     # Act
     response = client.put("/boards/1", json={
@@ -170,7 +179,6 @@ def test_update_board_not_found(client):
     assert response_body == {"message": "Board 1 not found"}
 
 
-@pytest.mark.skip(reason="No way to test this feature yet")
 def test_delete_board(client, one_board):
     # Act
     response = client.delete("/boards/1")
@@ -189,7 +197,6 @@ def test_delete_board(client, one_board):
     assert response_body ==  {'details': 'Board 1 "Inspo board" successfully deleted'}
 
 
-@pytest.mark.skip(reason="test to be completed by student")
 def test_delete_board_not_found(client):
     # Act
     response = client.delete("/boards/1")
@@ -198,13 +205,3 @@ def test_delete_board_not_found(client):
     # Assert
     assert response.status_code == 404
     assert response_body == {"message": "Board 1 not found"}
-
-
-def test_card_message_length_exceed_limit():
-    # Arrange
-    max_length =  40
-    message = "This is a test message that exceeds the character limit. It contains more than 40 characters."
-    # Act
-    result = is_message_within_limit(message, max_length)
-    # Assert
-    assert result == False 

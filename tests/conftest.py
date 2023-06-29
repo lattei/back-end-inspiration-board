@@ -61,6 +61,7 @@ def one_board(app):
     new_board = Board(title="Inspo board", owner="f-a-c-e")
     db.session.add(new_board)
     db.session.commit()
+    
 #Creates a board and card and it associates them with each other
 #so that this board has a card and the card is in one goal
 @pytest.fixture
@@ -70,18 +71,8 @@ def one_card_in_one_board(app, one_board, one_card):
     board.cards.append(card)
     db.session.commit()
 
-
-    
-
 @pytest.fixture
 def one_board(app):
     new_board = Board(title="Encouraging quips")
     db.session.add(new_board)
-    db.session.commit()
-
-@pytest.fixture
-def one_card_belongs_to_one_board(app, one_board, one_card):
-    card = Card.query.first()
-    board = Board.query.first()
-    board.cards.append(card)
     db.session.commit()
