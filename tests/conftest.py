@@ -44,3 +44,16 @@ def three_cards(app):
         message="and I oop")
     ])
     db.session.commit()
+
+@pytest.fixture
+def one_board(app):
+    new_board = Board(title="Encouraging quips")
+    db.session.add(new_board)
+    db.session.commit()
+
+@pytest.fixture
+def one_card_belongs_to_one_board(app, one_board, one_card):
+    card = Card.query.first()
+    board = Board.query.first()
+    board.cards.append(card)
+    db.session.commit()
