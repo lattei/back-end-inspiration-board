@@ -26,15 +26,12 @@ def create_card():
 
 @card_bp.route('/<int:card_id>', methods=['GET'])
 def get_card(card_id):
-    card = Card.query.get_or_404(card_id)
-    return jsonify(card.to_json())
-    #card = validate_model(Card, card_id)
-    # return {card.to_json()}, 200
+    card = validate_model(Card, card_id)
+    return card.to_json(), 200
 
 @card_bp.route('/<int:card_id>', methods=['PUT'])
 def update_card(card_id):
-    card = Card.query.get_or_404(card_id)
-    # card = validate_model(Card, card_id)
+    card = validate_model(Card, card_id)
     data = request.json
     message = data.get('message')
     likes_count = data.get('likes_count')
@@ -47,8 +44,7 @@ def update_card(card_id):
 
 @card_bp.route('/<int:card_id>', methods=['DELETE'])
 def delete_card(card_id):
-    card = Card.query.get_or_404(card_id)
-    # card = validate_model(Card, card_id)
+    card = validate_model(Card, card_id)
     db.session.delete(card)
     db.session.commit()
 
