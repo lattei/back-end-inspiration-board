@@ -21,6 +21,7 @@ class Card(db.Model):
             'message': self.message,
             'likes_count': self.likes_count
         }
+    
 
 from app.models.card import Card
 
