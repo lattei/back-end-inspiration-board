@@ -32,7 +32,10 @@ def client(app):
 @pytest.fixture
 def one_card(app):
     new_card = Card(
-        message="You got this",
+        board_id=None,
+        likes_count=0,
+        message="You got this"
+        
     )
     db.session.add(new_card)
     db.session.commit()
@@ -58,11 +61,11 @@ def likes_count(app):
 
 ### TESTING BOARD MODELS  ###
 # Fixture creates a board and saves it to the db
-@pytest.fixture
-def one_board(app):
-    new_board = Board(title="Inspo board", owner="f-a-c-e")
-    db.session.add(new_board)
-    db.session.commit()
+# @pytest.fixture
+# def one_board(app):
+#     new_board = Board(title="Inspo board", owner="f-a-c-e")
+#     db.session.add(new_board)
+#     db.session.commit()
     
 #Creates a board and card and it associates them with each other
 #so that this board has a card and the card is in one goal
@@ -75,6 +78,6 @@ def one_card_in_one_board(app, one_board, one_card):
 
 @pytest.fixture
 def one_board(app):
-    new_board = Board(title="Encouraging quips")
+    new_board = Board(title="Encouraging quips", owner="f-a-c-e")
     db.session.add(new_board)
     db.session.commit()

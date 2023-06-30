@@ -21,7 +21,6 @@ def create_board():
     board = Board(title=title, owner=owner)
     db.session.add(board)
     db.session.commit()
-
     return jsonify({'message': 'Board created successfully'}), 201
 
 @board_bp.route('/<board_id>', methods=['GET'])
