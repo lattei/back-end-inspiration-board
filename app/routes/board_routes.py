@@ -27,18 +27,19 @@ def get_board(board_id):
     board = validate_model(Board, board_id)
     return jsonify(board.to_json())
 
-@board_bp.route('/<int:board_id>', methods=['PUT'])
+@board_bp.route('/<board_id>', methods=['PUT'])
 def update_board(board_id):
     board = validate_model(Board, board_id)
     request_body = request.get_json()
-    board.title = request_body["title"]
-    board.owner = request_body["owner"]
+    # board.title = request_body["title"]
+    # board.owner = request_body["owner"]
+    board_data = Board.from_dict(request_body)
     
     db.session.commit()
+    return jsonify(board_data)
+    # return jsonify({'message': 'Board updated successfully'})
 
-    return jsonify({'message': 'Board updated successfully'})
-
-@board_bp.route('/<int:board_id>', methods=['DELETE'])
+@board_bp.route('/<board_id>', methods=['DELETE'])
 def delete_board(board_id):
     board = validate_model(Board, board_id)
 
@@ -47,7 +48,7 @@ def delete_board(board_id):
 
     return jsonify({'message': 'Board deleted successfully'})
 
-@board_bp.route('/<int:board_id>/cards', methods=['GET'])
+@board_bp.route('/<board_id>/cards', methods=['GET'])
 def get_board_cards(board_id):
     board = validate_model(Board, board_id)
     cards = board.cards
@@ -55,7 +56,7 @@ def get_board_cards(board_id):
     
     return jsonify(card_list),200
 
-@board_bp.route('/<int:board_id>/cards', methods=['POST'])
+@board_bp.route('/<board_id>/cards', methods=['POST'])
 def create_board_card(board_id):
     board = validate_model(Board, board_id)
     data = request.json
