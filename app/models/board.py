@@ -20,4 +20,11 @@ class Board(db.Model):
             "owner": self.owner
         }
 
+    @classmethod
+    def from_dict(cls,board_data):
+        return cls(
+            title=board_data["title"],
+            owner=board_data["owner"]
+        )
+
 from app.models.board import Board
