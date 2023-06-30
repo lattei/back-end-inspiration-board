@@ -12,9 +12,6 @@ def app():
     # create the app with a test config dictionary
     app = create_app({"TESTING": True})
 
-    @request_finished.connect_via(app)
-    def expire_session(sender, response, **extra):
-        db.session.remove()
 
     with app.app_context():
         db.create_all()
@@ -35,7 +32,7 @@ def client(app):
 @pytest.fixture
 def one_card(app):
     new_card = Card(
-        message="You got this"
+        message="You got this",
     )
     db.session.add(new_card)
     db.session.commit()
