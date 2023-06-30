@@ -26,55 +26,44 @@ def create_board():
 
 @board_bp.route('/<board_id>', methods=['GET'])
 def get_board(board_id):
-    board = Board.query.get_or_404(board_id)
+    board = validate_model(Board, board_id)
     return jsonify(board.to_json())
-    # with validate_model:
-    #board = validate_model(Board, board_id)
 
 @board_bp.route('/<int:board_id>', methods=['PUT'])
 def update_board(board_id):
-    board = Board.query.get_or_404(board_id)
-    data = request.json
-    title = data.get('title')
-    owner = data.get('owner')
-
-    board.title = title
-    board.owner = owner
-    db.session.commit()
-    # test this later, updated fn w/ validate_model
-    # board = validate_model(Board, board_id)
-    # request_body = request.get_json()
-    # board.title = request_body["title"]
-    # board.owner = request_body["owner"]
+    board = validate_model(Board, board_id)
+    request_body = request.get_json()
+    board.title = request_body["title"]
+    board.owner = request_body["owner"]
     
-
+    db.session.commit()
 
     return jsonify({'message': 'Board updated successfully'})
 
 @board_bp.route('/<int:board_id>', methods=['DELETE'])
 def delete_board(board_id):
-    board = Board.query.get_or_404(board_id)
+    board = validate_model(Board, board_id)
+
     db.session.delete(board)
     db.session.commit()
-    # board = validate_model(Board, board_id)
 
     return jsonify({'message': 'Board deleted successfully'})
 
 @board_bp.route('/<int:board_id>/cards', methods=['GET'])
 def get_board_cards(board_id):
-    board = Board.query.get_or_404(board_id)
+    board = validate_model(Board, board_id)
     cards = board.cards
     card_list = [card.to_json() for card in cards]
+    
     return jsonify(card_list)
 
 @board_bp.route('/<int:board_id>/cards', methods=['POST'])
 def create_board_card(board_id):
+    board = validate_model(Board, board_id)
     data = request.json
     message = data.get("message")
-
-    board = Board.query.get_or_404(board_id)
-
     card = Card(message=message, likes_count=0, board_id=board_id)
+    
     db.session.add(card)
     db.session.commit()
 
