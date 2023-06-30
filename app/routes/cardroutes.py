@@ -14,7 +14,7 @@ def get_cards():
 def create_card():
     data = request.json
     message = data.get('message')
-    likes_count = data.get('likes_count')
+    likes_count = data.get('likes_count', 0)
 
     card = Card(message=message, likes_count=likes_count)
     db.session.add(card)

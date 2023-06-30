@@ -7,6 +7,7 @@ class Board(db.Model):
     id= db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     owner = db.Column(db.String(255))
+    cards = db.relationship("Card", back_populates="board")
 
     def __init__(self,title, owner):
         self.title = title

@@ -8,6 +8,7 @@ class Card(db.Model):
     message = db.Column(db.String(255))
     likes_count = db.Column(db.Integer)
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
+    board = db.relationship("Board", back_populates="cards")
 
     def __init__(self, message, likes_count, board_id):
         self.message = message
@@ -22,3 +23,4 @@ class Card(db.Model):
         }
 
 from app.models.card import Card
+
